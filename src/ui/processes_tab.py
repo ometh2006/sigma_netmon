@@ -97,7 +97,7 @@ class ProcessesTab(QWidget):
             conns_by_pid = {}
 
         for proc in psutil.process_iter(
-                ["pid", "name", "status", "connections"]):
+                ["pid", "name", "status"]):
             try:
                 pid = proc.info["pid"]
                 name = proc.info["name"] or "Unknown"
