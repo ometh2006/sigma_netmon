@@ -18,7 +18,6 @@
 
 <br/>
 
-[**⬇ Download .exe**](../../releases/latest) &nbsp;·&nbsp; [**📖 How to Use**](#-how-to-use) &nbsp;·&nbsp; [**🛠 Build from Source**](#-build-from-source) &nbsp;·&nbsp; [**🗺 Roadmap**](#-roadmap)
 
 </div>
 
