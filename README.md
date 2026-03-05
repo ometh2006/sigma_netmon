@@ -6,8 +6,8 @@
 
 **Professional real-time network monitoring for Windows — built for developers, power users, and sysadmins.**
 
-[![Build](https://img.shields.io/github/actions/workflow/status/YOUR_USERNAME/sigma-netmon/build.yml?style=flat-square&logo=github-actions&label=Build)](../../actions)
-[![Release](https://img.shields.io/github/v/release/YOUR_USERNAME/sigma-netmon?style=flat-square&logo=github&color=06b6d4)](../../releases/latest)
+[![Build](https://img.shields.io/github/actions/workflow/status/ometh2006/sigma-netmon/build.yml?style=flat-square&logo=github-actions&label=Build)](../../actions)
+[![Release](https://img.shields.io/github/v/release/ometh2006/sigma-netmon?style=flat-square&logo=github&color=06b6d4)](../../releases/latest)
 [![Platform](https://img.shields.io/badge/Platform-Windows%2010%20%2F%2011-0078d4?style=flat-square&logo=windows)](../../releases)
 [![Python](https://img.shields.io/badge/Python-3.11%2B-3776ab?style=flat-square&logo=python&logoColor=white)](https://python.org)
 [![License](https://img.shields.io/badge/License-MIT-10b981?style=flat-square)](LICENSE)
