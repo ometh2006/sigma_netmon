@@ -128,22 +128,6 @@ Most network monitors are either too simple (just a speed widget) or too expensi
 
 ---
 
-## ⬇ Installation
-
-### Option A — Download the .exe _(Recommended)_
-
-1. Go to [**Releases → Latest**](../../releases/latest)
-2. Download `SigmaNetMon.exe`
-3. Double-click to run — **no installer, no setup, no .NET required**
-4. The app appears in your taskbar and system tray instantly
-
-> ✅ Single portable file. Works on any Windows 10 / 11 machine (x64).
-
-### Option B — Run from Python Source
-
-See the full guide in [**Build from Source**](#-build-from-source) below.
-
----
 
 ## 📖 How to Use
 
