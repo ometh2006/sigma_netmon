@@ -1,0 +1,111 @@
+name: Build Windows Installer
+
+on:
+  push:
+    branches: [main, master]
+    tags:     ["v*.*.*"]
+  pull_request:
+    branches: [main, master]
+  workflow_dispatch:        # allow manual run
+
+permissions:
+  contents: write           # needed to create releases
+
+jobs:
+  build:
+    name: Build on Windows
+    runs-on: windows-latest
+
+    steps:
+      # ── Checkout ──────────────────────────────────────────────────────────
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # ── Python ────────────────────────────────────────────────────────────
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+
+      # ── Dependencies ──────────────────────────────────────────────────────
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      # ── Build .exe via PyInstaller ─────────────────────────────────────────
+      - name: Build executable
+        run: |
+          pyinstaller sigma_netmon.spec --noconfirm --clean
+        shell: cmd
+
+      # ── Verify output ─────────────────────────────────────────────────────
+      - name: Verify dist/
+        run: |
+          dir dist\
+          if exist dist\SigmaNetMon.exe (echo BUILD OK) else (echo BUILD FAILED && exit /b 1)
+        shell: cmd
+
+      # ── Upload build artifact (every run) ─────────────────────────────────
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: SigmaNetMon-windows-x64
+          path: dist\SigmaNetMon.exe
+          if-no-files-found: error
+          retention-days: 30
+
+      # ── Create GitHub Release (on version tags only) ──────────────────────
+      - name: Create Release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist\SigmaNetMon.exe
+          generate_release_notes: true
+          name: "Σ Dev Network Monitor ${{ github.ref_name }}"
+          body: |
+            ## Σ Dev Network Monitor ${{ github.ref_name }}
+
+            ### Installation
+            1. Download `SigmaNetMon.exe` below
+            2. Run the installer — no additional setup needed
+            3. The app will appear in your system tray on launch
+
+            ### What's included
+            - Real-time bandwidth monitoring (1-second updates)
+            - Per-application network usage tracking
+            - Active connection viewer with DNS resolution
+            - Historical statistics (daily / weekly / monthly / yearly)
+            - Ping monitor, traceroute, DNS lookup diagnostics
+            - LAN device scanner (ARP)
+            - Alert system with Windows notifications
+            - Dark and Light themes
+            - Data export: CSV, JSON, PDF
+            - Runs silently in the Windows system tray
+
+            ### Requirements
+            - Windows 10 / 11 (x64)
+            - No admin rights required for basic monitoring
+            - Admin recommended for full per-process network stats
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # Optional: code quality check
+  lint:
+    name: Lint (flake8)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install flake8
+      - name: Run flake8
+        run: |
+          # Only fail on syntax errors / undefined names (E9, F63, F7, F82)
+          flake8 src/ --count --select=E9,F63,F7,F82 \
+                      --show-source --statistics
+          # Warn on style issues but don't fail
+          flake8 src/ --count --exit-zero --max-complexity=12 \
+                      --max-line-length=100 --statistics || true
